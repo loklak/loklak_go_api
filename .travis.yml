@@ -1,0 +1,9 @@
+language: go
+go: 
+ - tip
+
+install:
+ - go get github.com/hokaccha/go-prettyjson
+
+script:
+ - go install

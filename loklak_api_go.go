@@ -123,7 +123,7 @@ func fatal(err error) {
 
 func main() {
 	loklakObject := new(Loklak)
-	loklakObject.Connect("http://192.168.8.102:9000/")
+	loklakObject.Connect("http://loklak.org/")
 	helloResponse := loklakObject.hello()
 	fmt.Println(helloResponse)
 	peersResponse := loklakObject.peers()
