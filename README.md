@@ -1,5 +1,6 @@
 Loklak API Go
 =============
+[![Build Status](https://travis-ci.org/loklak/loklak_api_go.svg?branch=master)](https://travis-ci.org/loklak/loklak_api_go)
 
 This implements the API SDK for loklak server using golang. This is a Go client library for accessing the loklak API directly.
 
