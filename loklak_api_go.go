@@ -106,6 +106,17 @@ func (l *Loklak) apps() (string) {
 	return out
 }
 
+// The API Function for /api/settings.json api call.
+// This is only a localhost query
+func (l *Loklak) settings() (string) {
+	apiQuery := "http://localhost:9000/api/settings.json"
+	out, err := getJSON(apiQuery)
+	if err != nil {
+		fatal(err)
+	}
+	return out
+}
+
 // Helper function to return the error responses to stderr
 // Function name: fatal()
 // Scope        : globally accessible
@@ -123,7 +134,7 @@ func fatal(err error) {
 
 func main() {
 	loklakObject := new(Loklak)
-	loklakObject.Connect("http://loklak.org/")
+	loklakObject.Connect("http://192.168.0.3:9000/")
 	helloResponse := loklakObject.hello()
 	fmt.Println(helloResponse)
 	peersResponse := loklakObject.peers()
@@ -132,4 +143,6 @@ func main() {
 	fmt.Println(statusResponse)
 	appsResponse := loklakObject.apps()
 	fmt.Println(appsResponse)
+	settingsResponse := loklakObject.settings()
+	fmt.Println(settingsResponse)
 }
