@@ -13,18 +13,19 @@ import (
 
 // The Loklak Object structure.
 type Loklak struct {
-	baseUrl    string
-	name       string
-	followers  string
-	following  string
-	query      string
-	since      string
-	until      string
-	source     string
-	count      string
-	fields     string
-	from_user  string
-	limit      string
+	baseUrl     string
+	name        string
+	followers   string
+	following   string
+	query       string
+	since       string
+	until       string
+	source      string
+	count       string
+	fields      string
+	from_user   string
+	limit       string
+	screen_name string
 }
 
 // Initiation of the loklak object
@@ -150,13 +151,40 @@ func search (l *Loklak) (string) {
 	}
 	req.URL.RawQuery = q.Encode()
 	queryURL := req.URL.String()
-	fmt.Println(req.URL.String())
 	out, err := getJSON(queryURL)
 	if err != nil {
 		fatal(err)
 	}
 	return out
 }
+
+// The API Function for /api/user.json api call
+func user (l *Loklak) (string) {
+	apiQuery := l.baseUrl + "api/user.json"
+	req, _ := http.NewRequest("GET", apiQuery, nil)
+
+	q := req.URL.Query()
+
+	// Query construction
+	if l.screen_name != "" {
+		q.Add("screen_name", l.screen_name)
+	}
+	if l.following != "" {
+		q.Add("following", l.following)
+	}
+	if l.followers != "" {
+		q.Add("followers", l.followers)
+	}
+	req.URL.RawQuery = q.Encode()
+	queryURL := req.URL.String()
+	fmt.Println(queryURL)
+	out, err := getJSON(queryURL)
+	if err != nil {
+		fatal(err)
+	}
+	return out
+}
+
 
 // Helper function to return the error responses to stderr
 // Function name: fatal()
@@ -193,4 +221,9 @@ func main() {
 	loklakObject.source = "cache"
 	searchResponse := search(loklakObject)
 	fmt.Println(searchResponse)
+	loklakObject.screen_name = "sudheesh001"
+	loklakObject.followers = "10000000"
+	loklakObject.following = "10000000"
+	userResponse := user(loklakObject)
+	fmt.Println(userResponse)
 }
