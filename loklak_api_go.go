@@ -1,5 +1,5 @@
 // Package loklak_api_go is a library for interacting with http://loklak.org/
-package main
+package loklak_api_go
 
 import (
 	"encoding/json"
@@ -258,41 +258,4 @@ func suggest (l *Loklak) (string) {
 func fatal(err error) {
 	fmt.Fprintln(os.Stderr, err)
 	os.Exit(1)
-}
-
-// Everything below this is purely for testing only
-// The library ends above and needs to be packaged once all the API
-// components in the library are ready.
-
-func main() {
-	loklakObject := new(Loklak)
-	loklakObject.Connect("http://loklak.org/")
-	helloResponse := loklakObject.hello()
-	fmt.Println(helloResponse)
-	peersResponse := loklakObject.peers()
-	fmt.Println(peersResponse)
-	statusResponse := loklakObject.status()
-	fmt.Println(statusResponse)
-	appsResponse := loklakObject.apps()
-	fmt.Println(appsResponse)
-	settingsResponse := loklakObject.settings()
-	fmt.Println(settingsResponse)
-	loklakObject.query = "fossasia"
-	loklakObject.since = "2016-05-12"
-	loklakObject.until = "2016-06-02"
-	loklakObject.count = "10"
-	loklakObject.source = "cache"
-	searchResponse := search(loklakObject)
-	fmt.Println(searchResponse)
-	loklakObject.screen_name = "test"
-	loklakObject.followers = "10000000"
-	loklakObject.following = "10000000"
-	userResponse := user(loklakObject)
-	accountResponse := account(loklakObject)
-	fmt.Println(userResponse)
-	fmt.Println(accountResponse)
-	loklakObject.query = ""
-	loklakObject.count = ""
-	suggestResponse := suggest(loklakObject)
-	fmt.Println(suggestResponse)
 }
