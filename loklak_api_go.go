@@ -26,6 +26,8 @@ type Loklak struct {
 	from_user   string
 	limit       string
 	screen_name string
+	order       string
+	orderby     string
 }
 
 // Initiation of the loklak object
@@ -185,7 +187,7 @@ func user (l *Loklak) (string) {
 }
 
 // The API Function for the /api/account.json api call
-func account (l* Loklak) (string) {
+func account (l *Loklak) (string) {
 	apiQuery := "http://localhost:9000/api/account.json"
 
 	req, _ := http.NewRequest("GET", apiQuery, nil)
@@ -198,7 +200,47 @@ func account (l* Loklak) (string) {
 	}
 	req.URL.RawQuery = q.Encode()
 	queryURL := req.URL.String()
-	
+
+	out, err := getJSON(queryURL)
+	if err != nil {
+		fatal(err)
+	}
+	return out
+}
+
+// The API Function for /api/suggest.json api call
+func suggest (l *Loklak) (string) {
+	apiQuery := l.baseUrl + "api/suggest.json"
+
+	req, _ := http.NewRequest("GET", apiQuery, nil)
+
+	q := req.URL.Query()
+
+	// Query construction
+	if l.query != "" {
+		q.Add("q", l.query)
+	}
+	if l.count != "" {
+		q.Add("count", l.count)
+	}
+	if l.source != "" {
+		q.Add("source", l.source)
+	}
+	if l.order != "" {
+		q.Add("order", l.order)
+	}
+	if l.orderby != "" {
+		q.Add("orderby", l.orderby)
+	}
+	if l.since != "" {
+		q.Add("since", l.since)
+	}
+	if l.until != "" {
+		q.Add("until", l.until)
+	}
+	req.URL.RawQuery = q.Encode()
+	queryURL := req.URL.String()
+
 	out, err := getJSON(queryURL)
 	if err != nil {
 		fatal(err)
@@ -225,23 +267,23 @@ func fatal(err error) {
 func main() {
 	loklakObject := new(Loklak)
 	loklakObject.Connect("http://192.168.8.102:9000/")
-	// helloResponse := loklakObject.hello()
-	// fmt.Println(helloResponse)
-	// peersResponse := loklakObject.peers()
-	// fmt.Println(peersResponse)
-	// statusResponse := loklakObject.status()
-	// fmt.Println(statusResponse)
-	// appsResponse := loklakObject.apps()
-	// fmt.Println(appsResponse)
-	// settingsResponse := loklakObject.settings()
-	// fmt.Println(settingsResponse)
-	// loklakObject.query = "fossasia"
-	// loklakObject.since = "2016-05-12"
-	// loklakObject.until = "2016-06-02"
-	// loklakObject.count = "10"
-	// loklakObject.source = "cache"
-	// searchResponse := search(loklakObject)
-	// fmt.Println(searchResponse)
+	helloResponse := loklakObject.hello()
+	fmt.Println(helloResponse)
+	peersResponse := loklakObject.peers()
+	fmt.Println(peersResponse)
+	statusResponse := loklakObject.status()
+	fmt.Println(statusResponse)
+	appsResponse := loklakObject.apps()
+	fmt.Println(appsResponse)
+	settingsResponse := loklakObject.settings()
+	fmt.Println(settingsResponse)
+	loklakObject.query = "fossasia"
+	loklakObject.since = "2016-05-12"
+	loklakObject.until = "2016-06-02"
+	loklakObject.count = "10"
+	loklakObject.source = "cache"
+	searchResponse := search(loklakObject)
+	fmt.Println(searchResponse)
 	loklakObject.screen_name = "test"
 	loklakObject.followers = "10000000"
 	loklakObject.following = "10000000"
@@ -249,4 +291,8 @@ func main() {
 	accountResponse := account(loklakObject)
 	fmt.Println(userResponse)
 	fmt.Println(accountResponse)
+	loklakObject.query = ""
+	loklakObject.count = ""
+	suggestResponse := suggest(loklakObject)
+	fmt.Println(suggestResponse)
 }
