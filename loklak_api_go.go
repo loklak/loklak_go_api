@@ -117,6 +117,47 @@ func (l *Loklak) settings() (string) {
 	return out
 }
 
+// The API Function for /api/search.json api call
+// Format in order as 
+// Search function is implemented as a function and not as a method
+// Package the parameters required in the loklak object and pass accordingly
+func search (l *Loklak) (string) {
+	apiQuery := l.baseUrl + "api/search.json"
+	req, _ := http.NewRequest("GET",apiQuery, nil)
+
+	q := req.URL.Query()
+	
+	// Query constructions
+	if l.query != "" {
+		constructString := l.query
+		if l.since != "" {
+			constructString += " since:"+l.since
+		}
+		if l.until != "" {
+			constructString += " until:"+l.until
+		}
+		if l.from_user != "" {
+			constructString += " from:"+l.from_user
+		}
+		fmt.Println(constructString)
+		q.Add("q",constructString)
+	}
+	if l.count != "" {
+		q.Add("count", l.count)
+	}
+	if l.source != "" {
+		q.Add("source", l.source)
+	}
+	req.URL.RawQuery = q.Encode()
+	queryURL := req.URL.String()
+	fmt.Println(req.URL.String())
+	out, err := getJSON(queryURL)
+	if err != nil {
+		fatal(err)
+	}
+	return out
+}
+
 // Helper function to return the error responses to stderr
 // Function name: fatal()
 // Scope        : globally accessible
@@ -134,7 +175,7 @@ func fatal(err error) {
 
 func main() {
 	loklakObject := new(Loklak)
-	loklakObject.Connect("http://192.168.0.3:9000/")
+	loklakObject.Connect("http://192.168.8.102:9000/")
 	helloResponse := loklakObject.hello()
 	fmt.Println(helloResponse)
 	peersResponse := loklakObject.peers()
@@ -145,4 +186,11 @@ func main() {
 	fmt.Println(appsResponse)
 	settingsResponse := loklakObject.settings()
 	fmt.Println(settingsResponse)
+	loklakObject.query = "fossasia"
+	loklakObject.since = "2016-05-12"
+	loklakObject.until = "2016-06-02"
+	loklakObject.count = "10"
+	loklakObject.source = "cache"
+	searchResponse := search(loklakObject)
+	fmt.Println(searchResponse)
 }
