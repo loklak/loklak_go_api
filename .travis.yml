@@ -5,5 +5,9 @@ go:
 install:
  - go get github.com/hokaccha/go-prettyjson
 
+matrix:
+  allow_failures:
+  - go: tip
+
 script:
- - go install
+ - go test
