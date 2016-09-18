@@ -7,5 +7,10 @@ go_import_path: github.com/loklak/loklak_api_go
 install:
  - go get github.com/hokaccha/go-prettyjson
 
+matrix:
+  allow_failures:
+  - go: tip
+
 script:
- - go install
+  - go install
+  - go test
