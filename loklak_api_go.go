@@ -1,4 +1,4 @@
-// Package loklak_api_go is a library for interacting with http://loklak.org/
+// Package loklak_api_go is a library for interacting with a Loklak server
 package loklak_api_go
 
 import (
