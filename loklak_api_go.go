@@ -13,21 +13,21 @@ import (
 
 // The Loklak Object structure.
 type Loklak struct {
-	baseUrl     string
-	name        string
-	followers   string
-	following   string
-	query       string
-	since       string
-	until       string
-	source      string
-	count       string
-	fields      string
-	from_user   string
-	limit       string
-	screen_name string
-	order       string
-	orderby     string
+	baseURL    string
+	Name       string
+	Followers  string
+	Following  string
+	Query      string
+	Since      string
+	Until      string
+	Source     string
+	Count      string
+	Fields     string
+	FromUser   string
+	Limit      string
+	ScreenName string
+	Order      string
+	OrderBy    string
 }
 
 // Initiation of the loklak object
@@ -37,7 +37,7 @@ func (l *Loklak) Connect(urlString string) {
 		fmt.Println(u)
 		fatal(err)
 	} else {
-		l.baseUrl = urlString
+		l.baseURL = urlString
 	}
 }
 
@@ -70,8 +70,8 @@ func getJSON(route string) (string, error) {
 
 
 // The API function for the /api/hello.json api call.
-func (l *Loklak) hello() (string) {
-	apiQuery := l.baseUrl + "api/hello.json"
+func (l *Loklak) Hello() string {
+	apiQuery := l.baseURL + "api/hello.json"
 	out, err := getJSON(apiQuery)
 	if err != nil {
 		fatal(err)
@@ -80,8 +80,8 @@ func (l *Loklak) hello() (string) {
 }
 
 // The API function for the /api/peers.json api call.
-func (l *Loklak) peers() (string) {
-	apiQuery := l.baseUrl + "api/peers.json"
+func (l *Loklak) Peers() string {
+	apiQuery := l.baseURL + "api/peers.json"
 	out, err := getJSON(apiQuery)
 	if err != nil {
 		fatal(err)
@@ -90,8 +90,8 @@ func (l *Loklak) peers() (string) {
 }
 
 // The API function for the /api/status.json api call.
-func (l *Loklak) status() (string) {
-	apiQuery := l.baseUrl + "api/status.json"
+func (l *Loklak) Status() string {
+	apiQuery := l.baseURL + "api/status.json"
 	out, err := getJSON(apiQuery)
 	if err != nil {
 		fatal(err)
@@ -100,8 +100,8 @@ func (l *Loklak) status() (string) {
 }
 
 // The API Function for the /api/apps.json api call.
-func (l *Loklak) apps() (string) {
-	apiQuery := l.baseUrl + "api/apps.json"
+func (l *Loklak) Apps() string {
+	apiQuery := l.baseURL + "api/apps.json"
 	out, err := getJSON(apiQuery)
 	if err != nil {
 		fatal(err)
@@ -111,7 +111,7 @@ func (l *Loklak) apps() (string) {
 
 // The API Function for /api/settings.json api call.
 // This is only a localhost query
-func (l *Loklak) settings() (string) {
+func (l *Loklak) Settings() string {
 	apiQuery := "http://localhost:9000/api/settings.json"
 	out, err := getJSON(apiQuery)
 	if err != nil {
@@ -124,32 +124,32 @@ func (l *Loklak) settings() (string) {
 // Format in order as 
 // Search function is implemented as a function and not as a method
 // Package the parameters required in the loklak object and pass accordingly
-func search (l *Loklak) (string) {
-	apiQuery := l.baseUrl + "api/search.json"
-	req, _ := http.NewRequest("GET",apiQuery, nil)
+func Search(l *Loklak) string {
+	apiQuery := l.baseURL + "api/search.json"
+	req, _ := http.NewRequest("GET", apiQuery, nil)
 
 	q := req.URL.Query()
 	
 	// Query constructions
-	if l.query != "" {
-		constructString := l.query
-		if l.since != "" {
-			constructString += " since:"+l.since
+	if l.Query != "" {
+		constructString := l.Query
+		if l.Since != "" {
+			constructString += " since:" + l.Since
 		}
-		if l.until != "" {
-			constructString += " until:"+l.until
+		if l.Until != "" {
+			constructString += " until:" + l.Until
 		}
-		if l.from_user != "" {
-			constructString += " from:"+l.from_user
+		if l.FromUser != "" {
+			constructString += " from:" + l.FromUser
 		}
 		fmt.Println(constructString)
-		q.Add("q",constructString)
+		q.Add("q", constructString)
 	}
-	if l.count != "" {
-		q.Add("count", l.count)
+	if l.Count != "" {
+		q.Add("count", l.Count)
 	}
-	if l.source != "" {
-		q.Add("source", l.source)
+	if l.Source != "" {
+		q.Add("source", l.Source)
 	}
 	req.URL.RawQuery = q.Encode()
 	queryURL := req.URL.String()
@@ -161,21 +161,21 @@ func search (l *Loklak) (string) {
 }
 
 // The API Function for /api/user.json api call
-func user (l *Loklak) (string) {
-	apiQuery := l.baseUrl + "api/user.json"
+func User(l *Loklak) string {
+	apiQuery := l.baseURL + "api/user.json"
 	req, _ := http.NewRequest("GET", apiQuery, nil)
 
 	q := req.URL.Query()
 
 	// Query construction
-	if l.screen_name != "" {
-		q.Add("screen_name", l.screen_name)
+	if l.ScreenName != "" {
+		q.Add("screen_name", l.ScreenName)
 	}
-	if l.following != "" {
-		q.Add("following", l.following)
+	if l.Following != "" {
+		q.Add("following", l.Following)
 	}
-	if l.followers != "" {
-		q.Add("followers", l.followers)
+	if l.Followers != "" {
+		q.Add("followers", l.Followers)
 	}
 	req.URL.RawQuery = q.Encode()
 	queryURL := req.URL.String()
@@ -187,7 +187,7 @@ func user (l *Loklak) (string) {
 }
 
 // The API Function for the /api/account.json api call
-func account (l *Loklak) (string) {
+func Account(l *Loklak) string {
 	apiQuery := "http://localhost:9000/api/account.json"
 
 	req, _ := http.NewRequest("GET", apiQuery, nil)
@@ -195,8 +195,8 @@ func account (l *Loklak) (string) {
 	q := req.URL.Query()
 
 	// Query construction
-	if l.screen_name != "" {
-		q.Add("screen_name", l.screen_name)
+	if l.ScreenName != "" {
+		q.Add("screen_name", l.ScreenName)
 	}
 	req.URL.RawQuery = q.Encode()
 	queryURL := req.URL.String()
@@ -209,34 +209,34 @@ func account (l *Loklak) (string) {
 }
 
 // The API Function for /api/suggest.json api call
-func suggest (l *Loklak) (string) {
-	apiQuery := l.baseUrl + "api/suggest.json"
+func Suggest(l *Loklak) string {
+	apiQuery := l.baseURL + "api/suggest.json"
 
 	req, _ := http.NewRequest("GET", apiQuery, nil)
 
 	q := req.URL.Query()
 
 	// Query construction
-	if l.query != "" {
-		q.Add("q", l.query)
+	if l.Query != "" {
+		q.Add("q", l.Query)
 	}
-	if l.count != "" {
-		q.Add("count", l.count)
+	if l.Count != "" {
+		q.Add("count", l.Count)
 	}
-	if l.source != "" {
-		q.Add("source", l.source)
+	if l.Source != "" {
+		q.Add("source", l.Source)
 	}
-	if l.order != "" {
-		q.Add("order", l.order)
+	if l.Order != "" {
+		q.Add("order", l.Order)
 	}
-	if l.orderby != "" {
-		q.Add("orderby", l.orderby)
+	if l.OrderBy != "" {
+		q.Add("orderby", l.OrderBy)
 	}
-	if l.since != "" {
-		q.Add("since", l.since)
+	if l.Since != "" {
+		q.Add("since", l.Since)
 	}
-	if l.until != "" {
-		q.Add("until", l.until)
+	if l.Until != "" {
+		q.Add("until", l.Until)
 	}
 	req.URL.RawQuery = q.Encode()
 	queryURL := req.URL.String()
