@@ -33,7 +33,7 @@ func main() {
 	loklakObject := new(Loklak)
 	loklakObject.Connect("http://loklak.org/")
 	// Note that the Connect step is necessary, you have to mention the loklak server you'd like to connect to.
-	helloResponse := loklakObject.hello()
+	helloResponse := loklakObject.Hello()
 	fmt.Println(helloResponse)
 }
 ```
